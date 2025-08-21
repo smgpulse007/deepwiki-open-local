@@ -1,8 +1,22 @@
-# DeepWiki-Open
+# DeepWiki-Open-Local
 
 ![DeepWiki Banner](screenshots/Deepwiki.png)
 
-**DeepWiki** is my own implementation attempt of DeepWiki, automatically creates beautiful, interactive wikis for any GitHub, GitLab, or BitBucket repository! Just enter a repo name, and DeepWiki will:
+## 🔧 **Optimized Fork for Local NVIDIA GPU Setups**
+
+**Rebuild of the buggy deepwiki-open repo to optimize and make it work out of the box for local NVIDIA based GPU setups.** The original had this issue raised multiple times over the last 2 weeks and it is unresolved.
+
+### 🚀 **What's Fixed in This Fork:**
+- ✅ **Fixed Critical WebSocket Streaming Bug** - Resolved "No valid XML found in response" error
+- ✅ **Local Repository Support** - Analyze repositories directly from your filesystem
+- ✅ **NVIDIA GPU Optimization** - Optimized for local Ollama with GPU acceleration
+- ✅ **Enhanced XML Parsing** - Improved response parsing for better reliability
+- ✅ **Production-Ready Docker Setup** - Streamlined deployment with docker-compose
+- ✅ **Comprehensive Documentation** - Step-by-step setup guides included
+
+---
+
+**DeepWiki** automatically creates beautiful, interactive wikis for any GitHub, GitLab, BitBucket repository, or local folder! Just enter a repo name, and DeepWiki will:
 
 1. Analyze the code structure
 2. Generate comprehensive documentation
@@ -18,31 +32,59 @@
 
 ## ✨ Features
 
-- **Instant Documentation**: Turn any GitHub, GitLab or BitBucket repo into a wiki in seconds
+### 🏠 **Local-First Capabilities**
+- **Local Repository Analysis**: Analyze repositories directly from your filesystem without uploading
+- **NVIDIA GPU Acceleration**: Optimized for local Ollama with GPU acceleration
+- **No External Dependencies**: Works completely offline with local models
+- **Privacy-First**: Your code never leaves your machine
+
+### 🚀 **Core Features**
+- **Instant Documentation**: Turn any GitHub, GitLab, BitBucket repo, or local folder into a wiki in seconds
 - **Private Repository Support**: Securely access private repositories with personal access tokens
 - **Smart Analysis**: AI-powered understanding of code structure and relationships
 - **Beautiful Diagrams**: Automatic Mermaid diagrams to visualize architecture and data flow
 - **Easy Navigation**: Simple, intuitive interface to explore the wiki
 - **Ask Feature**: Chat with your repository using RAG-powered AI to get accurate answers
 - **DeepResearch**: Multi-turn research process that thoroughly investigates complex topics
-- **Multiple Model Providers**: Support for Google Gemini, OpenAI, OpenRouter, and local Ollama models
+- **Multiple Model Providers**: Support for Google Gemini, OpenAI, OpenRouter, and **optimized local Ollama models**
 
 ## 🚀 Quick Start (Super Easy!)
 
-### Option 1: Using Docker
+### 🏠 **Option 1: Local Ollama Setup (Recommended for NVIDIA GPUs)**
+
+**Perfect for local development with GPU acceleration - no external API keys needed!**
+
+```bash
+# Clone this optimized repository
+git clone https://github.com/smgpulse007/deepwiki-open-local.git
+cd deepwiki-open-local
+
+# Quick setup with the provided script
+./run-with-ollama.sh
+```
+
+**That's it!** The script will:
+- Install and configure Ollama
+- Download optimized models (gemma3:4b, nomic-embed-text)
+- Build and start the containers
+- Set up local repository mounting
+
+**Access your wiki at:** http://localhost:3000
+
+For detailed setup instructions, see [README-OLLAMA-SETUP.md](README-OLLAMA-SETUP.md)
+
+### ☁️ **Option 2: Using External APIs (Original Method)**
 
 ```bash
 # Clone the repository
-git clone https://github.com/AsyncFuncAI/deepwiki-open.git
-cd deepwiki-open
+git clone https://github.com/smgpulse007/deepwiki-open-local.git
+cd deepwiki-open-local
 
 # Create a .env file with your API keys
 echo "GOOGLE_API_KEY=your_google_api_key" > .env
 echo "OPENAI_API_KEY=your_openai_api_key" >> .env
 # Optional: Add OpenRouter API key if you want to use OpenRouter models
 echo "OPENROUTER_API_KEY=your_openrouter_api_key" >> .env
-# Optional: Add Ollama host if not local. defaults to http://localhost:11434
-echo "OLLAMA_HOST=your_ollama_host" >> .env
 # Optional: Add Azure API key, endpoint and version if you want to use azure openai models
 echo "AZURE_OPENAI_API_KEY=your_azure_openai_api_key" >> .env
 echo "AZURE_OPENAI_ENDPOINT=your_azure_openai_endpoint" >> .env
@@ -51,14 +93,38 @@ echo "AZURE_OPENAI_VERSION=your_azure_openai_version" >> .env
 docker-compose up
 ```
 
-For detailed instructions on using DeepWiki with Ollama and Docker, see [Ollama Instructions](Ollama-instruction.md).
-
 > 💡 **Where to get these keys:**
 > - Get a Google API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
 > - Get an OpenAI API key from [OpenAI Platform](https://platform.openai.com/api-keys)
 > - Get Azure OpenAI credentials from [Azure Portal](https://portal.azure.com/) - create an Azure OpenAI resource and get the API key, endpoint, and API version
 
-### Option 2: Manual Setup (Recommended)
+## 🔧 **What's Been Fixed**
+
+This fork addresses critical issues in the original deepwiki-open repository:
+
+### 🐛 **Critical Bug Fixes**
+- **WebSocket Streaming Bug**: Fixed the "No valid XML found in response" error that prevented wiki generation
+- **Content Extraction**: Properly handles Ollama's ChatResponse objects for reliable streaming
+- **XML Parsing**: Enhanced frontend parsing to handle XML responses in markdown code blocks
+- **Local Repository Access**: Fixed container volume mounting for local repository analysis
+
+### 🚀 **Performance Optimizations**
+- **Docker Build Optimization**: Reduced build time and size by not copying large model files
+- **GPU Memory Management**: Optimized for NVIDIA GPU setups with proper memory allocation
+- **Model Selection**: Pre-configured with efficient models (gemma3:4b, nomic-embed-text)
+- **Resource Management**: Proper container limits and health checks
+
+### 📁 **Local Repository Support**
+- **Direct Filesystem Access**: Analyze repositories without uploading to external services
+- **Volume Mounting**: Seamless integration with local development workflows
+- **Privacy-First**: Your code stays on your machine
+
+### 🛠️ **Developer Experience**
+- **One-Command Setup**: `./run-with-ollama.sh` handles everything
+- **Comprehensive Documentation**: Step-by-step guides for all scenarios
+- **Testing Framework**: Built-in validation and debugging tools
+
+### ☁️ **Option 3: Manual Setup (Advanced Users)**
 
 #### Step 1: Set Up Your API Keys
 
@@ -104,21 +170,27 @@ yarn dev
 #### Step 4: Use DeepWiki!
 
 1. Open [http://localhost:3000](http://localhost:3000) in your browser
-2. Enter a GitHub, GitLab, or Bitbucket repository (like `https://github.com/openai/codex`, `https://github.com/microsoft/autogen`, `https://gitlab.com/gitlab-org/gitlab`, or `https://bitbucket.org/redradish/atlassian_app_versions`)
-3. For private repositories, click "+ Add access tokens" and enter your GitHub or GitLab personal access token
-4. Click "Generate Wiki" and watch the magic happen!
+2. **For Local Repositories**: Enter a local path like `/app/local-repos/your-project` (if using Docker with volume mounts)
+3. **For Remote Repositories**: Enter a GitHub, GitLab, or Bitbucket repository (like `https://github.com/openai/codex`, `https://github.com/microsoft/autogen`, `https://gitlab.com/gitlab-org/gitlab`, or `https://bitbucket.org/redradish/atlassian_app_versions`)
+4. For private repositories, click "+ Add access tokens" and enter your GitHub or GitLab personal access token
+5. **Select Local Ollama** as your provider for GPU-accelerated local processing
+6. Click "Generate Wiki" and watch the magic happen!
 
 ## 🔍 How It Works
 
 DeepWiki uses AI to:
 
-1. Clone and analyze the GitHub, GitLab, or Bitbucket repository (including private repos with token authentication)
-2. Create embeddings of the code for smart retrieval
-3. Generate documentation with context-aware AI (using Google Gemini, OpenAI, OpenRouter, Azure OpenAI, or local Ollama models)
-4. Create visual diagrams to explain code relationships
-5. Organize everything into a structured wiki
-6. Enable intelligent Q&A with the repository through the Ask feature
-7. Provide in-depth research capabilities with DeepResearch
+1. **Process repositories** from multiple sources:
+   - 🏠 **Local repositories**: Direct filesystem access (privacy-first)
+   - ☁️ **Remote repositories**: Clone from GitHub, GitLab, or Bitbucket (including private repos with token authentication)
+2. **Create embeddings** of the code for smart retrieval using local or cloud models
+3. **Generate documentation** with context-aware AI:
+   - 🏠 **Local Ollama models** (GPU-accelerated, privacy-first)
+   - ☁️ **Cloud providers**: Google Gemini, OpenAI, OpenRouter, Azure OpenAI
+4. **Create visual diagrams** to explain code relationships and architecture
+5. **Organize everything** into a structured, navigable wiki
+6. **Enable intelligent Q&A** with the repository through the Ask feature
+7. **Provide in-depth research** capabilities with DeepResearch
 
 ```mermaid
 graph TD
@@ -548,10 +620,36 @@ Contributions are welcome! Feel free to:
 - Submit pull requests to improve the code
 - Share your feedback and ideas
 
+## 🙏 **Acknowledgments**
+
+This repository is a **fixed and optimized fork** of the original [deepwiki-open](https://github.com/AsyncFuncAI/deepwiki-open) by AsyncFuncAI.
+
+### **Why This Fork Exists**
+The original repository had several critical issues that prevented it from working properly with local setups:
+- WebSocket streaming failures causing "No valid XML found" errors
+- Inability to process local repositories
+- Poor optimization for NVIDIA GPU setups
+- Missing documentation for local deployment
+
+These issues were reported multiple times over several weeks but remained unresolved, so this fork was created to provide a **working, production-ready solution** for local development environments.
+
+### **Original Repository**
+- **Original Author**: AsyncFuncAI
+- **Original Repository**: https://github.com/AsyncFuncAI/deepwiki-open
+- **License**: MIT (maintained in this fork)
+
+### **This Fork's Improvements**
+- ✅ Fixed all critical bugs preventing local usage
+- ✅ Added comprehensive local repository support
+- ✅ Optimized for NVIDIA GPU acceleration
+- ✅ Added production-ready Docker configuration
+- ✅ Included detailed setup documentation
+- ✅ Added testing and validation tools
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## ⭐ Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=AsyncFuncAI/deepwiki-open&type=Date)](https://star-history.com/#AsyncFuncAI/deepwiki-open&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=smgpulse007/deepwiki-open-local&type=Date)](https://star-history.com/#smgpulse007/deepwiki-open-local&Date)
