@@ -917,12 +917,29 @@ IMPORTANT:
       responseText = responseText.replace(/^```(?:xml)?\s*/i, '').replace(/```\s*$/i, '');
 
       // Extract wiki structure from response
-      const xmlMatch = responseText.match(/<wiki_structure>[\s\S]*?<\/wiki_structure>/m);
-      if (!xmlMatch) {
-        throw new Error('No valid XML found in response');
+      // First try to extract XML from markdown code blocks
+      let xmlText = '';
+      const codeBlockMatch = responseText.match(/```(?:xml)?\s*([\s\S]*?)\s*```/);
+      if (codeBlockMatch) {
+        // Found XML in code block, extract it
+        const codeBlockContent = codeBlockMatch[1];
+        const xmlMatch = codeBlockContent.match(/<wiki_structure>[\s\S]*?<\/wiki_structure>/m);
+        if (xmlMatch) {
+          xmlText = xmlMatch[0];
+        }
       }
 
-      let xmlText = xmlMatch[0];
+      // If no XML found in code blocks, try direct match
+      if (!xmlText) {
+        const xmlMatch = responseText.match(/<wiki_structure>[\s\S]*?<\/wiki_structure>/m);
+        if (xmlMatch) {
+          xmlText = xmlMatch[0];
+        }
+      }
+
+      if (!xmlText) {
+        throw new Error('No valid XML found in response');
+      }
       xmlText = xmlText.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '');
       // Try parsing with DOMParser
       const parser = new DOMParser();

@@ -546,7 +546,14 @@ This file contains...
                 response = await model.acall(api_kwargs=api_kwargs, model_type=ModelType.LLM)
                 # Handle streaming response from Ollama
                 async for chunk in response:
-                    text = getattr(chunk, 'response', None) or getattr(chunk, 'text', None) or str(chunk)
+                    # Extract content from Ollama ChatResponse object
+                    text = ''
+                    if hasattr(chunk, 'message') and hasattr(chunk.message, 'content'):
+                        text = chunk.message.content or ''
+                    else:
+                        # Fallback to old method for compatibility
+                        text = getattr(chunk, 'response', None) or getattr(chunk, 'text', None) or str(chunk)
+
                     if text and not text.startswith('model=') and not text.startswith('created_at='):
                         text = text.replace('<think>', '').replace('</think>', '')
                         await websocket.send_text(text)
@@ -658,7 +665,14 @@ This file contains...
 
                         # Handle streaming fallback_response from Ollama
                         async for chunk in fallback_response:
-                            text = getattr(chunk, 'response', None) or getattr(chunk, 'text', None) or str(chunk)
+                            # Extract content from Ollama ChatResponse object
+                            text = ''
+                            if hasattr(chunk, 'message') and hasattr(chunk.message, 'content'):
+                                text = chunk.message.content or ''
+                            else:
+                                # Fallback to old method for compatibility
+                                text = getattr(chunk, 'response', None) or getattr(chunk, 'text', None) or str(chunk)
+
                             if text and not text.startswith('model=') and not text.startswith('created_at='):
                                 text = text.replace('<think>', '').replace('</think>', '')
                                 await websocket.send_text(text)

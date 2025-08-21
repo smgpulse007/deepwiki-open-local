@@ -75,8 +75,10 @@ COPY api/ ./api/
 COPY --from=node_builder /app/public ./public
 COPY --from=node_builder /app/.next/standalone ./
 COPY --from=node_builder /app/.next/static ./.next/static
+# Copy Ollama binary only (models will be downloaded when needed)
 COPY --from=ollama_base /usr/bin/ollama /usr/local/bin/
-COPY --from=ollama_base /root/.ollama /root/.ollama
+# Create ollama directory but don't copy models to save space
+RUN mkdir -p /root/.ollama
 
 # Expose the port the app runs on
 EXPOSE ${PORT:-8001} 3000
